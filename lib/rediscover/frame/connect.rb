@@ -37,9 +37,12 @@ module Rediscover
         begin
           @app.connect(host, port)
           close
-        rescue Errno::ECONNREFUSED => e
-          # TODO show error dialog
-          puts e
+        rescue => e
+          @app.logger.error(e.to_s)
+          @conn_refused_dialog = Rediscover::Dialog::Warn.new(self,
+                                                              "Can't connect to server.",
+                                                              'Unable to Connect')
+          @conn_refused_dialog.show_modal
         end
       end
 
