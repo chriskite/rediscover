@@ -11,6 +11,7 @@ module Rediscover
         super(nil, -1, 'Rediscover', DEFAULT_POSITION, Size.new(WINDOW_WIDTH, WINDOW_HEIGHT))
         setup_menu_bar
         setup_status_bar
+        setup_key_browser
         show
       end
 
@@ -25,9 +26,23 @@ module Rediscover
 
       def setup_status_bar
         @status_bar = create_status_bar(2)
+        @status_bar.set_status_widths([-3, -1]) # set fields to variable widths
+        update_status_bar
+      end
+
+      def update_status_bar
         @status_bar.set_status_text(@app.redis.to_s, 0) # connection info in left field
         @status_bar.set_status_text(@app.redis.dbsize.to_s + ' keys', 1) # key count in right field
-        @status_bar.set_status_widths([-3, -1]) # set fields to variable widths
+      end
+
+      def setup_key_browser
+        @key_list = ListBox.new(self)
+        update_key_browser
+      end
+
+      def update_key_browser
+        labels = @app.redis.keys('*').map { |key| key + ' => ' + @app.redis[key] }
+        @key_list.set(labels)
       end
 
       def create_keys_menu
@@ -35,6 +50,9 @@ module Rediscover
 
         create_key_item = menu.append('Create a Key', 'Create a new key/value pair')
         evt_menu create_key_item, :create_key_evt
+
+        refresh_item = menu.append('Refresh', 'Refresh the key browser')
+        evt_menu refresh_item, :refresh
 
         menu
       end
@@ -45,8 +63,8 @@ module Rediscover
       end
 
       def refresh
-        # TODO refresh the browser display
-        @app.logger.debug('Frame::Browser#refresh not implemented')
+        update_key_browser
+        update_status_bar
       end
 
     end
