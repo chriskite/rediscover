@@ -7,11 +7,11 @@ module Rediscover
       def initialize(app)
         @app = app
         super(nil, -1, 'Connect to Redis')
-        create_panel
+        setup_panel
         show
       end
 
-      def create_panel
+      def setup_panel
         @panel = Panel.new(self)
         @host_label = StaticText.new(@panel, :label => 'Host')
         @host_textbox = TextCtrl.new(@panel, :value => @app.host)

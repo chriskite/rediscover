@@ -1,6 +1,8 @@
 require 'logger'
+require 'rediscover/exception_handler'
 require 'rediscover/frame/connect'
 require 'rediscover/frame/browser'
+require 'rediscover/frame/create_key'
 require 'rediscover/dialog/error'
 
 module Rediscover
@@ -15,6 +17,7 @@ module Rediscover
 
     def on_init
       @logger = Logger.new(STDOUT)
+      ExceptionHandler.set_logger(@logger)
       @host = DEFAULTS[:host]
       @port = DEFAULTS[:port]
 

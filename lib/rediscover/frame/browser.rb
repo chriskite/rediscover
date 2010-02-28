@@ -1,5 +1,3 @@
-require 'rediscover/dialog/create_key'
-
 module Rediscover
   module Frame
     class Browser < Wx::Frame
@@ -42,13 +40,13 @@ module Rediscover
       end
 
       def create_key_evt
-        @create_key_dlg = Rediscover::Dialog::CreateKey.new(self)
-        @create_key_dlg.show_modal
-        refresh
+        @create_key_frame = Rediscover::Frame::CreateKey.new(self, @app)
+        @create_key_frame.on_create { refresh }
       end
 
       def refresh
         # TODO refresh the browser display
+        @app.logger.debug('Frame::Browser#refresh not implemented')
       end
 
     end
