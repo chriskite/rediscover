@@ -30,12 +30,21 @@ module Rediscover
     end
 
     def connect(host, port)
-      @redis = Redis.new(:host => host, :port => port)
-      @redis.connect_to_server # connection errors will be rescued by Frame::Connect
-      @host, @port = host, port
+      begin
+        @redis = Redis.new(:host => host, :port => port)
+        @redis.connect_to_server # connection errors will be rescued by Frame::Connect
+        @host, @port = host, port
+        @connect_frame.close
+      rescue => e
+        logger.error(e)
+        @conn_refused_dialog = Dialog::Warn.new(@connect_frame,
+                                                "Can't connect to server.",
+                                                'Unable to Connect')
+        @conn_refused_dialog.show_modal
+        return
+      end
 
       @logger.info(@redis.to_s)
-
       display_browser
     end
 

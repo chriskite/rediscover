@@ -33,17 +33,7 @@ module Rediscover
       def connect_button_click(event)
         host = @host_textbox.get_value
         port = @port_textbox.get_value.to_i
-
-        begin
-          @app.connect(host, port)
-          close
-        rescue => e
-          @app.logger.error(e.to_s)
-          @conn_refused_dialog = Rediscover::Dialog::Warn.new(self,
-                                                              "Can't connect to server.",
-                                                              'Unable to Connect')
-          @conn_refused_dialog.show_modal
-        end
+        @app.connect(host, port)
       end
 
     end
