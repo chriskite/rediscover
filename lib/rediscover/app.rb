@@ -1,7 +1,7 @@
 require 'logger'
 require 'rediscover/frame/connect'
 require 'rediscover/frame/browser'
-require 'rediscover/dialog/warn'
+require 'rediscover/dialog/error'
 
 module Rediscover
   class App < Wx::App
@@ -37,10 +37,10 @@ module Rediscover
         @connect_frame.close
       rescue => e
         logger.error(e)
-        @conn_refused_dialog = Dialog::Warn.new(@connect_frame,
+        @conn_refused_dlg = Dialog::Error.new(@connect_frame,
                                                 "Can't connect to server.",
                                                 'Unable to Connect')
-        @conn_refused_dialog.show_modal
+        @conn_refused_dlg.show_modal
         return
       end
 

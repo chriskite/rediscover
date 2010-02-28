@@ -1,3 +1,5 @@
+require 'rediscover/dialog/create_key'
+
 module Rediscover
   module Frame
     class Browser < Wx::Frame
@@ -9,16 +11,44 @@ module Rediscover
       def initialize(app)
         @app = app
         super(nil, -1, 'Rediscover', DEFAULT_POSITION, Size.new(WINDOW_WIDTH, WINDOW_HEIGHT))
+        setup_menu_bar
         setup_status_bar
         show
+      end
+
+      def setup_menu_bar
+        @menu_bar = MenuBar.new
+        set_menu_bar(@menu_bar)
+
+        @keys_menu = create_keys_menu
+
+        @menu_bar.append(@keys_menu, 'Keys')
       end
 
       def setup_status_bar
         @status_bar = create_status_bar(2)
         @status_bar.set_status_text(@app.redis.to_s, 0) # connection info in left field
         @status_bar.set_status_text(@app.redis.dbsize.to_s + ' keys', 1) # key count in right field
-        # set fields to variable widths
-        @status_bar.set_status_widths([-3, -1])
+        @status_bar.set_status_widths([-3, -1]) # set fields to variable widths
+      end
+
+      def create_keys_menu
+        menu = Menu.new
+
+        create_key_item = menu.append('Create a Key', 'Create a new key/value pair')
+        evt_menu create_key_item, :create_key_evt
+
+        menu
+      end
+
+      def create_key_evt
+        @create_key_dlg = Rediscover::Dialog::CreateKey.new(self)
+        @create_key_dlg.show_modal
+        refresh
+      end
+
+      def refresh
+        # TODO refresh the browser display
       end
 
     end

@@ -1,6 +1,6 @@
 module Rediscover
   module Dialog
-    class Warn < Wx::MessageDialog
+    class Error < Wx::MessageDialog
       include Wx
 
       def initialize(window, message, caption)

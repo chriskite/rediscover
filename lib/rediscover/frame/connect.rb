@@ -19,7 +19,7 @@ module Rediscover
         @port_textbox = TextCtrl.new(@panel, :value => @app.port.to_s)
         @connect_button = Button.new(@panel, :label => 'Connect')
 
-        evt_button @connect_button, :connect_button_click
+        evt_button @connect_button, :connect_button_evt
 
         @panel_sizer = BoxSizer.new(VERTICAL)
         @panel.set_sizer(@panel_sizer)
@@ -30,7 +30,7 @@ module Rediscover
         @panel_sizer.add(@connect_button, 0, GROW|ALL, 2)
       end
 
-      def connect_button_click(event)
+      def connect_button_evt
         host = @host_textbox.get_value
         port = @port_textbox.get_value.to_i
         @app.connect(host, port)
