@@ -1,3 +1,5 @@
+require 'rediscover/key_list_ctrl'
+
 module Rediscover
   module Frame
     class Browser < Wx::Frame
@@ -36,13 +38,12 @@ module Rediscover
       end
 
       def setup_key_browser
-        @key_list = ListBox.new(self)
+        @key_list = KeyListCtrl.new(self, @app)
         update_key_browser
       end
 
       def update_key_browser
-        labels = @app.redis.keys('*').map { |key| key + ' => ' + @app.redis[key] }
-        @key_list.set(labels)
+        @key_list.set_keys(@app.redis.keys('*'))
       end
 
       def create_keys_menu
