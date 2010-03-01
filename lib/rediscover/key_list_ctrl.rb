@@ -13,20 +13,31 @@ module Rediscover
       end
     end
 
-    def set_keys(keys)
-      @keys = keys
-      size = keys.size
+    def size
+      @keys.size
+    end
+
+    def on_get_keys(&block)
+      @on_get_keys_block = block
+    end
+
+    def update
+      @keys = @on_get_keys_block.call()
+      size = @keys.size
       @app.logger.debug("KeyListCtrl loaded #{size} keys")
-      set_item_count(keys.size)
+      delete_all_items
+      set_item_count(size)
     end
 
     def on_get_item_text(item, column)
-      case column
+      text = case column
         when COLS.index('Key') then @keys[item]
         when COLS.index('Value') then @app.redis[@keys[item]]
         when COLS.index('Type') then @app.redis.type?(@keys[item])
         when COLS.index('TTL') then @app.redis.ttl(@keys[item]).to_s
       end
+
+      return text || ''
     end
 
   end

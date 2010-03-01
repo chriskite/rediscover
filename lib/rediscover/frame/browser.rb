@@ -14,8 +14,8 @@ module Rediscover
         super(nil, -1, 'Rediscover', DEFAULT_POSITION, Size.new(WINDOW_WIDTH, WINDOW_HEIGHT))
         setup_menu_bar
         setup_tool_bar
-        setup_status_bar
         setup_key_browser
+        setup_status_bar
         show
       end
 
@@ -48,16 +48,13 @@ module Rediscover
 
       def update_status_bar
         @status_bar.set_status_text(@app.redis.to_s, 0) # connection info in left field
-        @status_bar.set_status_text(@app.redis.dbsize.to_s + ' keys', 1) # key count in right field
+        @status_bar.set_status_text(@key_list.size.to_s + ' keys', 1) rescue '' # key count in right field
       end
 
       def setup_key_browser
         @key_list = KeyListCtrl.new(self, @app)
-        update_key_browser
-      end
-
-      def update_key_browser
-        @key_list.set_keys(@app.redis.keys(@key_pattern))
+        @key_list.on_get_keys { @app.redis.keys(@key_pattern) }
+        @key_list.update
       end
 
       def create_keys_menu
@@ -78,7 +75,7 @@ module Rediscover
       end
 
       def refresh
-        update_key_browser
+        @key_list.update
         update_status_bar
       end
 
