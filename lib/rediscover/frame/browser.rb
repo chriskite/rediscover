@@ -16,7 +16,12 @@ module Rediscover
         setup_tool_bar
         setup_key_browser
         setup_status_bar
+        setup_key_shortcuts
         show
+      end
+
+      def setup_key_shortcuts
+        evt_key_up { |event| refresh if event.get_key_code == K_F5 }
       end
 
       def setup_menu_bar
@@ -38,6 +43,7 @@ module Rediscover
         evt_button @filter_button, :filter # filter when button is pressed
         @tool_bar.add_control(@filter_textbox)
         @tool_bar.add_control(@filter_button)
+        @tool_bar.realize
       end
 
       def setup_status_bar
@@ -53,7 +59,7 @@ module Rediscover
 
       def setup_key_browser
         @key_list = KeyListCtrl.new(self, @app)
-        @key_list.on_get_keys { @app.redis.keys(@key_pattern) }
+        @key_list.on_get_keys { @app.redis.keys(@key_pattern).sort }
         @key_list.update
       end
 

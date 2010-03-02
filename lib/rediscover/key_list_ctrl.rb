@@ -11,6 +11,8 @@ module Rediscover
       COLS.each do |name|
         insert_column(i += 1, name)
       end
+
+      evt_list_item_right_click self, :list_item_right_click_evt
     end
 
     def size
@@ -29,6 +31,14 @@ module Rediscover
       set_item_count(size)
     end
 
+    def delete(selections)
+      selections.each do |index|
+        key = @keys[index]
+        @app.redis.delete(key)
+      end
+      update
+    end
+
     def on_get_item_text(item, column)
       text = case column
         when COLS.index('Key') then @keys[item]
@@ -38,6 +48,24 @@ module Rediscover
       end
 
       return text || ''
+    end
+
+    def list_item_right_click_evt(event)
+      menu = get_ctx_menu_for_selections(get_selections)
+      popup_menu(menu, event.get_point) if menu
+    end
+
+    def get_ctx_menu_for_selections(selections)
+      return nil if selections.empty?
+      @ctx_menu = Menu.new
+      @ctx_delete_item = MenuItem.new(@ctx_menu, -1, 'Delete')
+      evt_menu(@ctx_delete_item) do
+        if ID_YES == Dialog::Confirm.new(self, 'Really delete selected key(s)?', 'Really delete?').show_modal
+          delete(selections)
+        end
+      end
+      @ctx_menu.append_item(@ctx_delete_item)
+      @ctx_menu
     end
 
   end

@@ -4,6 +4,7 @@ require 'rediscover/frame/connect'
 require 'rediscover/frame/browser'
 require 'rediscover/frame/create_key'
 require 'rediscover/dialog/error'
+require 'rediscover/dialog/confirm'
 
 module Rediscover
   class App < Wx::App
