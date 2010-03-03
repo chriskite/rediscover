@@ -4,8 +4,8 @@ module Rediscover
     class Connect < Wx::Frame
       include Wx
 
-      def initialize(app)
-        @app = app
+      def initialize
+        @app = get_app
         super(nil, -1, 'Connect to Redis')
         setup_panel
         show

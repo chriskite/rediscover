@@ -4,8 +4,9 @@ module Rediscover
 
     COLS = %w(Key Value Type TTL)
 
-    def initialize(window, app)
-      @app = app
+    def initialize(window)
+      @redis = get_app.redis
+      @logger = get_app.logger
       super(window, :style => LC_REPORT|LC_VIRTUAL)
       i = 0
       COLS.each do |name|
@@ -26,7 +27,7 @@ module Rediscover
     def update
       @keys = @on_get_keys_block.call()
       size = @keys.size
-      @app.logger.debug("KeyListCtrl loaded #{size} keys")
+      @logger.debug("KeyListCtrl loaded #{size} keys")
       delete_all_items
       set_item_count(size)
     end
@@ -34,7 +35,7 @@ module Rediscover
     def delete(selections)
       selections.each do |index|
         key = @keys[index]
-        @app.redis.delete(key)
+        @redis.delete(key)
       end
       update
     end
@@ -42,9 +43,9 @@ module Rediscover
     def on_get_item_text(item, column)
       text = case column
         when COLS.index('Key') then @keys[item]
-        when COLS.index('Value') then @app.redis[@keys[item]]
-        when COLS.index('Type') then @app.redis.type?(@keys[item])
-        when COLS.index('TTL') then @app.redis.ttl(@keys[item]).to_s
+        when COLS.index('Value') then @redis[@keys[item]]
+        when COLS.index('Type') then @redis.type?(@keys[item])
+        when COLS.index('TTL') then @redis.ttl(@keys[item]).to_s
       end
 
       return text || ''

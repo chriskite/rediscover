@@ -26,11 +26,11 @@ module Rediscover
     end
 
     def display_connect
-      @connect_frame = Frame::Connect.new(self)
+      @connect_frame = Frame::Connect.new
     end
 
     def display_browser
-      @browser_frame = Frame::Browser.new(self)
+      @browser_frame = Frame::Browser.new
     end
 
     def connect(host, port)

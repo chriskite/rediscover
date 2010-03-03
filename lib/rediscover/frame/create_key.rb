@@ -3,8 +3,8 @@ module Rediscover
     class CreateKey < Wx::Frame
       include Wx
 
-      def initialize(window, app)
-        @app = app
+      def initialize(window)
+        @redis = get_app.redis
         super(window, -1, 'Create a Key')
         setup_panel
         show
@@ -38,7 +38,7 @@ module Rediscover
         value = @value_textbox.get_value
 
         begin
-          @app.redis[key] = value
+          @redis[key] = value
         rescue => e
           ExceptionHandler.modal(self, e)
           return

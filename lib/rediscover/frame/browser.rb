@@ -8,8 +8,8 @@ module Rediscover
       WINDOW_WIDTH = 600
       WINDOW_HEIGHT = 400
 
-      def initialize(app)
-        @app = app
+      def initialize
+        @redis = get_app.redis
         @key_pattern = '*'
         super(nil, -1, 'Rediscover', DEFAULT_POSITION, Size.new(WINDOW_WIDTH, WINDOW_HEIGHT))
         setup_menu_bar
@@ -53,13 +53,13 @@ module Rediscover
       end
 
       def update_status_bar
-        @status_bar.set_status_text(@app.redis.to_s, 0) # connection info in left field
+        @status_bar.set_status_text(@redis.to_s, 0) # connection info in left field
         @status_bar.set_status_text(@key_list.size.to_s + ' keys', 1) rescue '' # key count in right field
       end
 
       def setup_key_browser
-        @key_list = KeyListCtrl.new(self, @app)
-        @key_list.on_get_keys { @app.redis.keys(@key_pattern).sort }
+        @key_list = KeyListCtrl.new(self)
+        @key_list.on_get_keys { @redis.keys(@key_pattern).sort }
         @key_list.update
       end
 
@@ -76,7 +76,7 @@ module Rediscover
       end
 
       def create_key_evt
-        @create_key_frame = Rediscover::Frame::CreateKey.new(self, @app)
+        @create_key_frame = Rediscover::Frame::CreateKey.new(self)
         @create_key_frame.on_create { refresh }
       end
 
