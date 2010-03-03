@@ -1,8 +1,7 @@
 require 'logger'
 require 'rediscover/exception_handler'
 require 'rediscover/frame/connect'
-require 'rediscover/frame/browser'
-require 'rediscover/frame/create_key'
+require 'rediscover/frame/main'
 require 'rediscover/dialog/error'
 require 'rediscover/dialog/confirm'
 
@@ -29,8 +28,8 @@ module Rediscover
       @connect_frame = Frame::Connect.new
     end
 
-    def display_browser
-      @browser_frame = Frame::Browser.new
+    def display_main
+      @main_frame = Frame::Main.new
     end
 
     def connect(host, port)
@@ -49,7 +48,7 @@ module Rediscover
       end
 
       @logger.info(@redis.to_s)
-      display_browser
+      display_main
     end
 
   end

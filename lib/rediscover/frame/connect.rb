@@ -12,7 +12,7 @@ module Rediscover
       end
 
       def setup_panel
-        @panel = Panel.new(self)
+        @panel = Wx::Panel.new(self)
         @host_label = StaticText.new(@panel, :label => 'Host')
         @host_textbox = TextCtrl.new(@panel, :value => @app.host)
         @port_label = StaticText.new(@panel, :label => 'Port')
