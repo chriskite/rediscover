@@ -23,16 +23,31 @@ module Rediscover
         @sizer = BoxSizer.new(VERTICAL)
         set_sizer(@sizer)
       end
-	  
+
       def setup_tool_bar
         @tool_bar_sizer = BoxSizer.new(HORIZONTAL)
         @sizer.add_item(@tool_bar_sizer)
+
+        @add_button = Button.new(self, ID_ADD)
+        evt_button(@add_button) do
+          create_key_frame = Rediscover::Frame::CreateKey.new(self)
+          create_key_frame.on_create { refresh }
+        end
+
+        @refresh_button = Button.new(self, ID_REFRESH)
+        evt_button @refresh_button, :refresh
+
+        # filter input and button
         @filter_textbox = TextCtrl.new(self,
                                        :style => TE_PROCESS_ENTER,
                                        :size => Size.new(200, -1))
         evt_text_enter @filter_textbox, :filter # filter when enter is pressed in the textbox
         @filter_button = Button.new(self, :label => 'Filter')
         evt_button @filter_button, :filter # filter when button is pressed
+
+        # add elements to tool bar
+        @tool_bar_sizer.add_item(@add_button)
+        @tool_bar_sizer.add_item(@refresh_button)
         @tool_bar_sizer.add_item(@filter_textbox)
         @tool_bar_sizer.add_item(@filter_button)
       end

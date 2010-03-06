@@ -1,5 +1,6 @@
 require 'logger'
 require 'rediscover/exception_handler'
+require 'rediscover/icon'
 require 'rediscover/frame/connect'
 require 'rediscover/frame/main'
 require 'rediscover/dialog/error'

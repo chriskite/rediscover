@@ -7,6 +7,9 @@ module Rediscover
       def initialize
         @app = get_app
         super(nil, -1, 'Connect to Redis')
+
+        set_icon(Rediscover::Icon.new('server_connect'))
+
         setup_panel
         show
       end

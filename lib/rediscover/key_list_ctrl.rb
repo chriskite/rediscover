@@ -7,7 +7,9 @@ module Rediscover
     def initialize(window)
       @redis = get_app.redis
       @logger = get_app.logger
+
       super(window, :style => LC_REPORT|LC_VIRTUAL)
+
       i = 0
       COLS.each do |name|
         insert_column(i += 1, name)
@@ -43,12 +45,25 @@ module Rediscover
     def on_get_item_text(item, column)
       text = case column
         when COLS.index('Key') then @keys[item]
-        when COLS.index('Value') then @redis[@keys[item]]
-        when COLS.index('Type') then @redis.type?(@keys[item])
+        when COLS.index('Value') then get_item_value(item)
+        when COLS.index('Type') then get_item_type(item)
         when COLS.index('TTL') then @redis.ttl(@keys[item]).to_s
       end
 
       return text || ''
+    end
+
+    def get_item_type(item)
+      @redis.type?(@keys[item])
+    end
+
+    def get_item_value(item)
+      case get_item_type(item)
+        when 'string' then return @redis[@keys[item]]
+        when 'list' then return "#{@redis.list_length(@keys[item])} element(s)" 
+        when 'set' then return "#{@redis.set_count(@keys[item])} element(s)"
+        when 'zset' then return "#{@redis.zset_count(@keys[item])} element(s)"
+      end
     end
 
     def list_item_right_click_evt(event)

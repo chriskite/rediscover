@@ -12,9 +12,11 @@ module Rediscover
 
       def initialize
         super(nil, -1, 'Rediscover', DEFAULT_POSITION, Size.new(WINDOW_WIDTH, WINDOW_HEIGHT))
-        
+
         @redis = get_app.redis
         @logger = get_app.logger
+
+        set_icon(Rediscover::Icon.new('application'))
 
         setup_notebook
         setup_status_bar
@@ -23,7 +25,7 @@ module Rediscover
 
       def setup_notebook
         @notebook = Notebook.new(self)
-        
+
         @server_page = Panel::Server.new(@notebook)
         @browser_page = Panel::Browser.new(@notebook)
 
@@ -40,10 +42,6 @@ module Rediscover
       def update_status_bar
         @status_bar.set_status_text(@redis.to_s, 0) # connection info in left field
         @status_bar.set_status_text(@key_list.size.to_s + ' keys', 1) rescue '' # key count in right field
-      end
-
-      def filter
-        @logger.debug("Frame::Main#filter not implemented")
       end
 
     end

@@ -6,12 +6,15 @@ module Rediscover
       def initialize(window)
         @redis = get_app.redis
         super(window, -1, 'Create a Key')
+
+        set_icon(Rediscover::Icon.new('key_add'))
+
         setup_panel
         show
       end
 
       def setup_panel
-        @panel = Panel.new(self)
+        @panel = Wx::Panel.new(self)
         @key_label = StaticText.new(@panel, :label => 'Key')
         @key_textbox = TextCtrl.new(@panel)
         @value_label = StaticText.new(@panel, :label => 'Value')
@@ -44,7 +47,7 @@ module Rediscover
           return
         end
 
-        @on_create_block.call()
+        @on_create_block.call() if @on_create_block
         close
       end
 
