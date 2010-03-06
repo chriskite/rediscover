@@ -60,7 +60,7 @@ module Rediscover
     def get_item_value(item)
       case get_item_type(item)
         when 'string' then return @redis[@keys[item]]
-        when 'list' then return "#{@redis.list_length(@keys[item])} element(s)" 
+        when 'list' then return "#{@redis.list_length(@keys[item])} element(s)"
         when 'set' then return "#{@redis.set_count(@keys[item])} element(s)"
         when 'zset' then return "#{@redis.zset_count(@keys[item])} element(s)"
       end
@@ -74,14 +74,31 @@ module Rediscover
     def get_ctx_menu_for_selections(selections)
       return nil if selections.empty?
       @ctx_menu = Menu.new
+
+      if selections.size == 1
+        @ctx_edit_item = MenuItem.new(@ctx_menu, -1, 'Edit')
+        evt_menu(@ctx_edit_item) { do_on_edit(*selections) }
+      end
+
+      # delete menu item
       @ctx_delete_item = MenuItem.new(@ctx_menu, -1, 'Delete')
       evt_menu(@ctx_delete_item) do
         if ID_YES == Dialog::Confirm.new(self, 'Really delete selected key(s)?', 'Really delete?').show_modal
           delete(selections)
         end
       end
+
+      @ctx_menu.append_item(@ctx_edit_item) if @ctx_edit_item
       @ctx_menu.append_item(@ctx_delete_item)
       @ctx_menu
+    end
+
+    def on_edit(&block)
+      @on_edit_block = block
+    end
+
+    def do_on_edit(selection)
+      @on_edit_block.call(@keys[selection])
     end
 
   end

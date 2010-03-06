@@ -1,5 +1,6 @@
 require 'rediscover/panel/server'
 require 'rediscover/panel/browser'
+require 'rediscover/panel/key_list'
 require 'rediscover/panel/string_view'
 require 'rediscover/frame/create_key'
 
@@ -42,7 +43,8 @@ module Rediscover
 
       def update_status_bar
         @status_bar.set_status_text(@redis.to_s, 0) # connection info in left field
-        @status_bar.set_status_text(@key_list.size.to_s + ' keys', 1) rescue '' # key count in right field
+        # TODO dbsize in right status bar field
+        #@status_bar.set_status_text(@key_list.size.to_s + ' keys', 1) rescue '' # key count in right field
       end
 
     end

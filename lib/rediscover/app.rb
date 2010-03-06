@@ -1,4 +1,5 @@
 require 'logger'
+require 'forwardable'
 require 'rediscover/exception_handler'
 require 'rediscover/icon'
 require 'rediscover/frame/connect'

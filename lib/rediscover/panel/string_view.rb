@@ -3,22 +3,23 @@ module Rediscover
     class StringView < Wx::Panel
       include Wx
 
-      attr_accessor :key
-
-      def initialize(parent)
+      def initialize(parent, key)
         @parent = parent
         super(@parent, -1)
 
+        @key = key
         @redis = get_app.redis
 
         setup
       end
 
       def setup
+        value = @redis[@key]
+
         @sizer = BoxSizer.new(VERTICAL)
         set_sizer(@sizer)
 
-        @value_textbox = TextCtrl.new(self)
+        @value_textbox = TextCtrl.new(self, :value => value)
 
         @save_button = Button.new(self, :label => 'Save')
         evt_button @save_button, :save
