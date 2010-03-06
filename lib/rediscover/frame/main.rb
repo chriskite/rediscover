@@ -1,5 +1,6 @@
 require 'rediscover/panel/server'
 require 'rediscover/panel/browser'
+require 'rediscover/panel/string_view'
 require 'rediscover/frame/create_key'
 
 module Rediscover
