@@ -1,7 +1,10 @@
 require 'rediscover/panel/server'
 require 'rediscover/panel/browser'
 require 'rediscover/panel/key_list'
+require 'rediscover/key_viewer'
+require 'rediscover/element_list_ctrl'
 require 'rediscover/panel/string_view'
+require 'rediscover/panel/set_view'
 require 'rediscover/frame/create_key'
 
 module Rediscover

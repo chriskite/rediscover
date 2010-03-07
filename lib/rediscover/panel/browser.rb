@@ -27,7 +27,10 @@ module Rediscover
       end
 
       def get_view_panel(key, type)
-        Panel::StringView.new(self, key)
+        case type
+          when 'string' then return Panel::StringView.new(self, key)
+          when 'set' then return Panel::SetView.new(self, key)
+        end
       end
 
     end
