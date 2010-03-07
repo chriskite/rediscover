@@ -21,17 +21,18 @@ module Rediscover
 
     def set_elements(elements)
       delete_all_items
-      elements.each { |element| insert_item(0, element) }
+      i = 0
+      elements.each { |element| insert_item(i, element); i += 1 }
       @elements = elements
     end
 
     def delete(selections)
       delete_elements = selections.map { |index| @elements[index] }
       delete_elements.each do |element|
+        @elements.delete(element)
         @redis.srem(@key, element)
         delete_item(find_item(0, element))
       end
-      @logger.debug("#{get_item_count} items remain")
       update
       do_on_save
     end
