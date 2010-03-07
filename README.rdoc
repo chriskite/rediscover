@@ -5,6 +5,9 @@ using the WxRuby graphical toolkit.
 
 Give it a try and send in your feedback and feature requests.
 
+== Installation
+gem install rediscover
+
 == Features
 * Runs on Linux, Windows, Mac OSX
 * Tabbed interface with 'Server Info' and 'Key Browser'
