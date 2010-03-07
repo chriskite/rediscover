@@ -1,6 +1,6 @@
 module Rediscover
   module Panel
-    class SetView < Wx::Panel
+    class SortedSetView < Wx::Panel
       include Wx
       include KeyViewer
 
@@ -15,14 +15,14 @@ module Rediscover
       end
 
       def setup
-        members = @redis.smembers(@key)
+        members = @redis.zrange(@key, 0, -1)
 
         @sizer = BoxSizer.new(VERTICAL)
         set_sizer(@sizer)
 
         @key_label = StaticText.new(self, :label => "Key: #{@key}")
 
-        @element_list = SetElementList.new(self, @key, members)
+        @element_list = SortedSetElementList.new(self, @key, members)
         @element_list.on_save { do_on_save }
 
         @button_sizer = BoxSizer.new(HORIZONTAL)
@@ -44,8 +44,8 @@ module Rediscover
       def add
         @add_dlg = TextEntryDialog.new(self, 'Enter a new element:', 'Add Element')
         if @add_dlg.show_modal == ID_OK
-          @redis.sadd(@key, @add_dlg.get_value)
-          @element_list.set_elements(@redis.smembers(@key))
+          @redis.zadd(@key, 0, @add_dlg.get_value) # TODO get a priority score
+          @element_list.set_elements(@redis.zrange(@key, 0, -1))
           do_on_save
         end
       end

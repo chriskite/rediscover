@@ -30,6 +30,8 @@ module Rediscover
         case type
           when 'string' then return Panel::StringView.new(self, key)
           when 'set' then return Panel::SetView.new(self, key)
+          when 'zset' then return Panel::SortedSetView.new(self, key)
+          when 'list' then return Panel::ListView.new(self, key)
         end
       end
 

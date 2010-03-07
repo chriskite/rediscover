@@ -1,5 +1,5 @@
 module Rediscover
-  class ElementListCtrl < Wx::ListCtrl
+  class SortedSetElementList < Wx::ListCtrl
     include Wx
 
     def initialize(parent, key, elements)
@@ -30,7 +30,7 @@ module Rediscover
       delete_elements = selections.map { |index| @elements[index] }
       delete_elements.each do |element|
         @elements.delete(element)
-        @redis.srem(@key, element)
+        @redis.zrem(@key, element)
         delete_item(find_item(0, element))
       end
       update
