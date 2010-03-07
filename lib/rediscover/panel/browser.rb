@@ -35,6 +35,10 @@ module Rediscover
         end
       end
 
+      def on_status_change(&block)
+        @key_list_panel.on_status_change { |status| block.call(status) }
+      end
+
     end
   end
 end

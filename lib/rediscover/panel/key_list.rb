@@ -80,6 +80,10 @@ module Rediscover
         refresh
       end
 
+      def on_status_change(&block)
+        @key_list.on_status_change { |status| block.call(status) }
+      end
+
     end
   end
 end

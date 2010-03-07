@@ -30,10 +30,10 @@ module Rediscover
 
     def update
       @keys = @on_get_keys_block.call()
-      size = @keys.size
       @logger.debug("KeyListCtrl loaded #{size} keys")
       delete_all_items
       set_item_count(size)
+      do_on_status_change
     end
 
     def delete(selections)
@@ -102,6 +102,15 @@ module Rediscover
     def do_on_edit(selection)
       key = @keys[selection]
       @on_edit_block.call(key, @redis.type?(key), selection)
+    end
+
+    def on_status_change(&block)
+      @on_status_change_block = block
+      do_on_status_change
+    end
+
+    def do_on_status_change
+      @on_status_change_block.call("#{size} keys") if @on_status_change_block
     end
 
   end

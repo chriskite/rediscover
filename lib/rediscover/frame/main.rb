@@ -27,8 +27,8 @@ module Rediscover
 
         set_icon(Rediscover::Icon.new('application'))
 
-        setup_notebook
         setup_status_bar
+        setup_notebook
         show
       end
 
@@ -37,6 +37,7 @@ module Rediscover
 
         @server_page = Panel::Server.new(@notebook)
         @browser_page = Panel::Browser.new(@notebook)
+        @browser_page.on_status_change { |status| update_status_bar(status) }
 
         @notebook.add_page(@server_page, 'Server Info', false)
         @notebook.add_page(@browser_page, 'Key Browser', true)
@@ -48,10 +49,9 @@ module Rediscover
         update_status_bar
       end
 
-      def update_status_bar
+      def update_status_bar(status = nil)
         @status_bar.set_status_text(@redis.to_s, 0) # connection info in left field
-        # TODO dbsize in right status bar field
-        #@status_bar.set_status_text(@key_list.size.to_s + ' keys', 1) rescue '' # key count in right field
+        @status_bar.set_status_text(status, 1) if status # key count in right field
       end
 
     end
