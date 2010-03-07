@@ -10,7 +10,7 @@ module Rediscover
 
       def initialize(parent)
         @parent = parent
-        super(@parent, -1)
+        super(@parent, -1, :style => SUNKEN_BORDER)
 
         @redis = get_app.redis
         @logger = get_app.logger
@@ -49,10 +49,10 @@ module Rediscover
         evt_button @filter_button, :filter # filter when button is pressed
 
         # add elements to tool bar
-        @tool_bar_sizer.add_item(@add_button)
-        @tool_bar_sizer.add_item(@refresh_button)
-        @tool_bar_sizer.add_item(@filter_textbox)
-        @tool_bar_sizer.add_item(@filter_button)
+        @tool_bar_sizer.add_item(@add_button, :flag => ALL, :border => 1)
+        @tool_bar_sizer.add_item(@refresh_button, :flag => ALL, :border => 1)
+        @tool_bar_sizer.add_item(@filter_textbox, :flag => ALL, :border => 1)
+        @tool_bar_sizer.add_item(@filter_button, :flag => ALL, :border => 1)
       end
 
       def setup_key_shortcuts
@@ -66,8 +66,12 @@ module Rediscover
         @key_list.update
       end
 
-      def refresh
-        @key_list.update
+      def refresh(item = nil)
+        if(item)
+          @key_list.refresh_item(item)
+        else
+          @key_list.update
+        end
       end
 
       def filter

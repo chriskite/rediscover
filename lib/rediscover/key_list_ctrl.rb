@@ -98,7 +98,8 @@ module Rediscover
     end
 
     def do_on_edit(selection)
-      @on_edit_block.call(@keys[selection])
+      key = @keys[selection]
+      @on_edit_block.call(key, @redis.type?(key), selection)
     end
 
   end
