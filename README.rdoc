@@ -6,6 +6,7 @@ using the WxRuby graphical toolkit.
 Give it a try and send in your feedback and feature requests.
 
 == Features
+* Runs on Linux, Windows, Mac OSX
 * Tabbed interface with 'Server Info' and 'Key Browser'
 * Fast key browsing interface shows key values and types
 * Filter keys by glob-style pattern
