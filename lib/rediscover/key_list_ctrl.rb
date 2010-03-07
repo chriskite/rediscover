@@ -14,6 +14,8 @@ module Rediscover
       COLS.each do |name|
         insert_column(i += 1, name)
       end
+      set_column_width(0, 200)
+      set_column_width(1, 200)
 
       evt_list_item_right_click self, :list_item_right_click_evt
     end
