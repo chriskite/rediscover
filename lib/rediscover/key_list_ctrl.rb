@@ -75,7 +75,7 @@ module Rediscover
       return nil if selections.empty?
       @ctx_menu = Menu.new
 
-      if selections.size == 1
+      if selections.size == 1 && @redis.type?(@keys[*selections]) != 'none'
         @ctx_edit_item = MenuItem.new(@ctx_menu, -1, 'Edit')
         evt_menu(@ctx_edit_item) { do_on_edit(*selections) }
       end
