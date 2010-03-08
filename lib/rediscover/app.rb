@@ -39,6 +39,12 @@ module Rediscover
       display_connect
     end
 
+    def on_run
+      super
+    rescue Exception => e
+      @logger.fatal(e)
+    end	
+	
     def display_connect
       @connect_frame = Frame::Connect.new
     end
