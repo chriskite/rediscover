@@ -2,10 +2,23 @@ require 'logger'
 require 'forwardable'
 require 'rediscover/exception_handler'
 require 'rediscover/icon'
+require 'rediscover/key_list_ctrl'
+require 'rediscover/key_viewer'
+require 'rediscover/set_element_list'
+require 'rediscover/sorted_set_element_list'
+require 'rediscover/list_element_list'
 require 'rediscover/frame/connect'
 require 'rediscover/frame/main'
+require 'rediscover/frame/create_key'
 require 'rediscover/dialog/error'
 require 'rediscover/dialog/confirm'
+require 'rediscover/panel/server'
+require 'rediscover/panel/browser'
+require 'rediscover/panel/key_list'
+require 'rediscover/panel/string_view'
+require 'rediscover/panel/set_view'
+require 'rediscover/panel/sorted_set_view'
+require 'rediscover/panel/list_view'
 
 module Rediscover
   class App < Wx::App
@@ -18,7 +31,7 @@ module Rediscover
     attr_reader :logger, :host, :port, :redis
 
     def on_init
-      @logger = Logger.new(STDOUT)
+      @logger = Logger.new('rediscover.log')
       ExceptionHandler.set_logger(@logger)
       @host = DEFAULTS[:host]
       @port = DEFAULTS[:port]
@@ -49,7 +62,6 @@ module Rediscover
         return
       end
 
-      @logger.info(@redis.to_s)
       display_main
     end
 

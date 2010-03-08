@@ -1,5 +1,3 @@
-require 'rediscover/key_list_ctrl'
-
 module Rediscover
   module Panel
     class KeyList < Wx::Panel

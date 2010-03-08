@@ -30,7 +30,6 @@ module Rediscover
 
     def update
       @keys = @on_get_keys_block.call()
-      @logger.debug("KeyListCtrl loaded #{size} keys")
       delete_all_items
       set_item_count(size)
       do_on_status_change

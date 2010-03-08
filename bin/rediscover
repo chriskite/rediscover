@@ -3,4 +3,6 @@
 $:.unshift(File.dirname(__FILE__) + '/../lib/')
 require 'rediscover'
 
-Rediscover::App.new.main_loop()
+if not defined?(Ocra)
+  Rediscover::App.new.main_loop()
+end
