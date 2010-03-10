@@ -6,7 +6,9 @@ using the WxRuby graphical toolkit.
 Give it a try and send in your feedback and feature requests.
 
 == Installation
-gem install rediscover
+For Windows: {Download the Installer}[http://www.chriskite.com/Rediscover-0.0.2.exe]
+
+On all platforms: gem install rediscover
 
 == Features
 * Runs on Linux, Windows, Mac OSX
