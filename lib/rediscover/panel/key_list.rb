@@ -8,7 +8,7 @@ module Rediscover
 
       def initialize(parent)
         @parent = parent
-        super(@parent, -1, :style => SUNKEN_BORDER)
+        super(@parent, -1)
 
         @redis = get_app.redis
         @logger = get_app.logger

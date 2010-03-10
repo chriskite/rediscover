@@ -2,7 +2,7 @@ module Rediscover
   class KeyListCtrl < Wx::ListCtrl
     include Wx
 
-    COLS = %w(Key Value Type TTL)
+    COLS = %w(Key Value Type)
 
     def initialize(window)
       @redis = get_app.redis
@@ -15,9 +15,10 @@ module Rediscover
         insert_column(i += 1, name)
       end
       set_column_width(0, 200)
-      set_column_width(1, 200)
+      set_column_width(1, 300)
 
       evt_list_item_right_click self, :list_item_right_click_evt
+      evt_list_item_activated self, :list_item_activated_evt
     end
 
     def size
@@ -48,14 +49,18 @@ module Rediscover
         when COLS.index('Key') then @keys[item]
         when COLS.index('Value') then get_item_value(item)
         when COLS.index('Type') then get_item_type(item)
-        when COLS.index('TTL') then @redis.ttl(@keys[item]).to_s
       end
 
       return text || ''
     end
 
     def get_item_type(item)
-      @redis.type?(@keys[item])
+      if @cached_item.nil? || @cached_item[:index] != item
+        @cached_item = {}
+        @cached_item[:index] = item
+        @cached_item[:type] = @redis.type?(@keys[item])
+      end
+      @cached_item[:type]
     end
 
     def get_item_value(item)
@@ -65,6 +70,10 @@ module Rediscover
         when 'set' then return "#{@redis.set_count(@keys[item])} element(s)"
         when 'zset' then return "#{@redis.zset_count(@keys[item])} element(s)"
       end
+    end
+
+    def list_item_activated_evt
+      do_on_edit(*get_selections)
     end
 
     def list_item_right_click_evt(event)
